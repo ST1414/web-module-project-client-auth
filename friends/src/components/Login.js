@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import useLocalStorage from '../hooks/useLocalStorage';
+import {useHistory} from 'react-router-dom';
+import axios from 'axios';
 
-const initialCredentials = { username:'', password:'' };
+const initialCredentials = { username:'', password:'', token: '' };
 
 const Login = () => {
 
-    const [ credentials, setCredentials ] = useLocalStorage('credentials', initialCredentials);
+    const [ credentials, setCredentials ] = useState(initialCredentials);
     const [ isLoading, setIsLoading ] = useState(false);
+    const history = useHistory();
 
     const handleChange = e => {
-        console.log('Login - Handle Change')
-        console.log(e.target.name, ' ', e.target.value);
         setCredentials({
             ...credentials,
             [e.target.name]: e.target.value
@@ -19,15 +19,28 @@ const Login = () => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log('Login - Form Submit', e.target.name, e.target.value)
+        setIsLoading(true);
+        axios.post('http://localhost:5000/api/login', credentials)
+            .then( response => {
+                localStorage.setItem('token', response.data.payload);
+                history.push('/friendslist')
+
+            })
+            .catch( error => {
+                console.log(error)
+            })
+            .finally(setIsLoading(false));
     }
+
+    
 
     return (
         <div className='login'>
             <h1>Log In Page</h1>
+            {isLoading === true && <h4>*** Please wait, we are getting your friends *** </h4>}
             <form onSubmit={handleSubmit}>
                 <input type='text' name='username' value={credentials.username} onChange={handleChange} /><br/>
-                <input type='text' name='password' value={credentials.password} onChange={handleChange} /><br/>
+                <input type='password' name='password' value={credentials.password} onChange={handleChange} /><br/>
                 <button>Log In</button>
             </form>
         </div>
