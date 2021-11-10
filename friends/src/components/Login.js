@@ -36,7 +36,7 @@ const Login = () => {
 
     return (
         <div className='login'>
-            <h1>Log In Page</h1>
+            <h2>Log In Page</h2>
             {isLoading === true && <h4>*** Please wait, we are getting your friends *** </h4>}
             <form onSubmit={handleSubmit}>
                 <input type='text' name='username' value={credentials.username} onChange={handleChange} /><br/>

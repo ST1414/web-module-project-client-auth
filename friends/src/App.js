@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import Login from './components/Login'
 import FriendsList from './components/FriendsList';
+import AddFriend from './components/AddFriend';
 import PrivateRoute from './components/PrivateRoute';
 
 
@@ -11,14 +12,16 @@ import PrivateRoute from './components/PrivateRoute';
 // }
 
 function App() {
+  
   return (
     <Router>
       <div className="App">
-        <h2>Client Auth Project</h2>
+        <h1>Client Auth Project</h1>
         <Link to="/login">Log In</Link><br/>
         <Link to="/logout">Log Out</Link>
         <Route path='/login' component={Login}/>
         <PrivateRoute path='/friendslist' component={FriendsList}/>
+        <PrivateRoute path='/addfriend' component={AddFriend}/>
       </div>
     </Router>
   );
